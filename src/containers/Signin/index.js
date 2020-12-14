@@ -26,13 +26,6 @@ export const Signin = () => {
 
     const [password, setPassword] = useState('');
 
-    useEffect(() => {
-
-        if( !auth.authenticate ){
-            dispatch(isUserLoggedIn());
-        }
-
-    }, [])
     
     // const [error, setError] = useState();
 
