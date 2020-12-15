@@ -6,7 +6,39 @@ const initialState = {
     error: null
 }
 
+const buildNewCategories = ( papaId, categories, category ) => {
+    
+    let myCategories = [];
+    for(let cat of categories ){
 
+        // if they  == , we know is a son category
+
+        if(cat._id == papaId ){
+            // Tree expansion at its finest
+    
+            myCategories.push({
+                ...cat,
+                // You just wanna modify the category, so that's the only one u have to pass
+                children: cat.children && cat.children.length > 0 ? buildNewCategories(papaId, [...cat.children, {
+                    _id: category._id,
+                    name: category.name,
+                    slug: category.slug,
+                    parentId: category.parentId,
+                    children: category.children,
+                }], category) : []
+            });
+        } else {
+            // If they are diff, we know is a papa category
+            myCategories.push({
+                ...cat,
+                children: cat.children && cat.children.length > 0 ? buildNewCategories(papaId, cat.children, category) : []
+            });
+        }
+
+    }
+
+    return myCategories;
+}
 
 export const categoryReducer = ( state = initialState, action ) => {
 
@@ -27,9 +59,15 @@ export const categoryReducer = ( state = initialState, action ) => {
             break;
         
         case categoryConstants.ADD_NEW_CATEGORY_SUCCESS:
+            
+        const category =  action.payload.category;
+            const updatecat = buildNewCategories( category.parentId ,state.categories, category);
+            console.log(updatecat);
+
             state = {
                 ...state,
                 loading: false,
+                categories: updatecat,
                 // categories: action.payload.categories
             }
             break;

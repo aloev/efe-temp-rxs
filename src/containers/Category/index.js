@@ -9,7 +9,7 @@ import { Input } from '../../UI/Input'
 
 
 
-export const Category = () => {
+export const Category = (props) => {
 
     const category = useSelector(state => state.category);
 
@@ -90,7 +90,7 @@ export const Category = () => {
 
 
     return (
-        <div>
+
             <Layout sidebar>
                 <Container>
                     <Row>
@@ -150,6 +150,5 @@ export const Category = () => {
                     </Modal.Footer>
                 </Modal>
             </Layout>
-        </div>
     )
 }
