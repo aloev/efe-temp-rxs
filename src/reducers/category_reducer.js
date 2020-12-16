@@ -9,9 +9,29 @@ const initialState = {
 const buildNewCategories = ( papaId, categories, category ) => {
     
     let myCategories = [];
+
+    // if ain't no son
+
+    if( papaId == undefined ){
+
+        return [
+            ...categories,
+            {
+                _id: category._id,
+                name: category.name,
+                slug: category.slug,
+                children: [],
+            }
+
+        ];
+    }
+
+
+    // if they  == , we know is a son category
+
     for(let cat of categories ){
 
-        // if they  == , we know is a son category
+        //if papaID given equals id within categories arrays passed
 
         if(cat._id == papaId ){
             // Tree expansion at its finest
@@ -19,7 +39,7 @@ const buildNewCategories = ( papaId, categories, category ) => {
             myCategories.push({
                 ...cat,
                 // You just wanna modify the category, so that's the only one u have to pass
-                children: cat.children && cat.children.length > 0 ? buildNewCategories(papaId, [...cat.children, {
+                children: cat.children ? buildNewCategories(papaId, [...cat.children, {
                     _id: category._id,
                     name: category.name,
                     slug: category.slug,
@@ -28,10 +48,10 @@ const buildNewCategories = ( papaId, categories, category ) => {
                 }], category) : []
             });
         } else {
-            // If they are diff, we know is a papa category
+            // If they are diff, 
             myCategories.push({
                 ...cat,
-                children: cat.children && cat.children.length > 0 ? buildNewCategories(papaId, cat.children, category) : []
+                children: cat.children ? buildNewCategories(papaId, cat.children, category) : []
             });
         }
 
@@ -60,15 +80,13 @@ export const categoryReducer = ( state = initialState, action ) => {
         
         case categoryConstants.ADD_NEW_CATEGORY_SUCCESS:
             
-        const category =  action.payload.category;
+            const category =  action.payload.category;
             const updatecat = buildNewCategories( category.parentId ,state.categories, category);
-            console.log(updatecat);
 
             state = {
                 ...state,
                 loading: false,
                 categories: updatecat,
-                // categories: action.payload.categories
             }
             break;
         

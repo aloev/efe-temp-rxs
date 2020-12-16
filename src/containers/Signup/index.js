@@ -7,7 +7,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { signup } from '../../actions/user_actions';
 import { Layout } from '../../components/Layout'
-import { Input } from '../../UI/Input';
+import { Input } from '../../components/UI/Input';
+
+
 
 export const Signup = () => {
 

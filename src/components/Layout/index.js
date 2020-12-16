@@ -3,7 +3,7 @@ import React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import { Header } from '../Header/index';
-
+import './style.css';
 
 
 export const Layout = (props) => {
@@ -26,7 +26,7 @@ export const Layout = (props) => {
                         </ul>
 
                     </Col>
-                    <Col md={ 10 } style={{ marginLeft: 'auto'  }}> 
+                    <Col md={ 10 } style={{ marginLeft: 'auto', paddingTop: '60px'  }}> 
                     { props.children}
 
                     </Col>

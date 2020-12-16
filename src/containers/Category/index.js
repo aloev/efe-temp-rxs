@@ -1,11 +1,12 @@
 
 
-import React, { useEffect, useState } from 'react'
-import { Container, Row, Col, Modal, Button } from 'react-bootstrap'
-import { useDispatch, useSelector } from 'react-redux'
-import { addCategory, getAllcategories } from '../../actions'
-import { Layout } from '../../components/Layout'
-import { Input } from '../../UI/Input'
+import React, {  useState } from 'react';
+import { Container, Row, Col } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
+import { addCategory } from '../../actions';
+import { Layout } from '../../components/Layout';
+import { Input } from '../../components/UI/Input';
+import { newModal as Modal } from '../../components/UI/Modal';
 
 
 
@@ -23,36 +24,16 @@ export const Category = (props) => {
 
     const [show, setShow] = useState(false);
 
-    const handleClose = () => {
-
-        const form = new FormData();
-
-        form.append('name', categoryName);
-        form.append('parentId', parentCategoryId);
-        form.append('categoryImage', categoryImage);
-
-        // const cat = {
-        //     categoryName,
-        //     parentCategoryId,
-        //     categoryImage
-        // };
-
-        dispatch( addCategory(form));
-
-        setShow(false);
-    };
 
     const handleShow = () => setShow(true);
 
     const handleCategoryImage = (e) => {
         setCategoryImage(e.target.value);
     }
-    
-    useEffect(() => {
-        dispatch( getAllcategories());
-    }, [])
+
 
     const renderCategories = ( categories ) => {
+
 
         let Decategories = [];
 
@@ -72,8 +53,24 @@ export const Category = (props) => {
             );
         }
 
+
         return Decategories;
     }
+
+    const handleClose = () => {
+
+        const form = new FormData();
+
+        form.append('name', categoryName);
+        form.append('parentId', parentCategoryId);
+        form.append('categoryImage', categoryImage);
+        dispatch( addCategory(form));
+
+        setCategoryName('');
+        setParentCategoryId('');
+        setShow(false);
+
+    };
 
     const createCategoryList = ( categories, options = []) => {
 
@@ -111,13 +108,12 @@ export const Category = (props) => {
                         </Col>
                     </Row>
 
-                </Container>
-                    
-                <Modal show={show} onHide={handleClose}>
-                    <Modal.Header closeButton>
-                        <Modal.Title> Add New Category </Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
+                    {/* This tag MUST be a Modal for it to work */}
+                    <Modal
+                        show = { show }
+                        handleClose = { handleClose }
+                        modalTitle = { 'Add new Category' }
+                    >
 
                         < Input 
                             value = { categoryName }
@@ -142,13 +138,12 @@ export const Category = (props) => {
                         
                         <input type="file" name="categoryImage" onChange={ handleCategoryImage }  />
 
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="primary" onClick={handleClose}>
-                            Save Changes
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
+
+                    </Modal>
+
+                </Container>
+                    
+                
             </Layout>
     )
 }
