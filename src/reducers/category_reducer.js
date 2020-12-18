@@ -34,18 +34,21 @@ const buildNewCategories = ( papaId, categories, category ) => {
         //if papaID given equals id within categories arrays passed
 
         if(cat._id == papaId ){
+
+            const newCategory = {
+                _id: category._id,
+                name: category.name,
+                slug: category.slug,
+                parentId: category.parentId,
+                children: [],
+            };
+
             // Tree expansion at its finest
     
             myCategories.push({
                 ...cat,
                 // You just wanna modify the category, so that's the only one u have to pass
-                children: cat.children ? buildNewCategories(papaId, [...cat.children, {
-                    _id: category._id,
-                    name: category.name,
-                    slug: category.slug,
-                    parentId: category.parentId,
-                    children: category.children,
-                }], category) : []
+                children: cat.children.length > 0 ? [...cat.children, newCategory ] : [ newCategory ]  
             });
         } else {
             // If they are diff, 
